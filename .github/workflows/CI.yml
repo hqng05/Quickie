@@ -1,0 +1,120 @@
+name: Build Gradle Project
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-commit:
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.check_commit.outputs.should_build }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        id: check_commit
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            COMMITS=$(git log ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} --format="%s")
+          else
+            COMMITS=$(git log -1 --format="%s")
+          fi
+          
+          echo "Checking commit messages..."
+          echo "$COMMITS"
+          INVALID_COMMITS=0
+          
+          while IFS= read -r commit; do
+            if [[ -z "$commit" ]]; then
+              continue
+            fi
+          
+            if [[ ! "$commit" =~ ^[a-z]+\([a-z0-9_-]+\):\ .+$ ]]; then
+              echo "❌ Invalid commit message: $commit"
+              echo "Expected format: <type>(<scope>): <subject>"
+              echo "Example: feat(api): add user authentication"
+              INVALID_COMMITS=$((INVALID_COMMITS + 1))
+            else
+              echo "✅ Valid commit: $commit"
+            fi
+          done <<< "$COMMITS"
+          
+          if [ $INVALID_COMMITS -gt 0 ]; then
+            echo "❌ Found $INVALID_COMMITS invalid commit(s). Build will be skipped."
+            echo "should_build=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ All commits are valid."
+            echo "should_build=true" >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    needs: validate-commit
+    if: needs.validate-commit.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'gradle'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle (clean build)
+        run: ./gradlew clean shadowJar
+
+      - name: Get JAR file name
+        id: get_jar_name
+        run: |
+          JAR_FILE=$(find build/libs -name "*.jar" ! -name "*-plain.jar" | head -1)
+          JAR_NAME=$(basename "$JAR_FILE")
+          echo "jar_name=$JAR_NAME" >> $GITHUB_OUTPUT
+          echo "Found JAR: $JAR_NAME"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.get_jar_name.outputs.jar_name }}
+          path: |
+            build/libs/*.jar
+            !build/libs/*-plain.jar
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 7
+
+  build-skipped:
+    needs: validate-commit
+    if: needs.validate-commit.outputs.should_build == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Skipped
+        run: |
+          echo "⚠️ Build skipped due to invalid commit message format."
+          echo "Please use format: <type>(<scope>): <subject>"
+          echo "Examples:"
+          echo "  - feat(api): add user authentication"
+          echo "  - fix(database): resolve connection issue"
+          echo "  - docs(readme): update installation guide"
