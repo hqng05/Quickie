@@ -1,0 +1,47 @@
+# ========================================
+# COMMIT MESSAGE TEMPLATE
+# ========================================
+
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+
+# ----------------------------------------
+# TYPE (bắt buộc):
+#   feat     - Tính năng mới
+#   fix      - Sửa lỗi
+#   docs     - Thay đổi documentation
+#   style    - Format code (không ảnh hưởng logic)
+#   refactor - Tái cấu trúc code
+#   test     - Thêm/sửa test
+#   chore    - Cập nhật build, tool, dependencies
+#   perf     - Tối ưu hiệu năng
+# ----------------------------------------
+# SCOPE (tùy chọn):
+#   Phạm vi ảnh hưởng (module, component, file...)
+# ----------------------------------------
+# SUBJECT (bắt buộc):
+#   - Viết ngắn gọn, dưới 50 ký tự
+#   - Bắt đầu bằng chữ thường
+#   - Không kết thúc bằng dấu chấm
+# ----------------------------------------
+# BODY (tùy chọn):
+#   - Giải thích WHAT và WHY
+#   - Mỗi dòng không quá 72 ký tự
+# ----------------------------------------
+# FOOTER (tùy chọn):
+#   - BREAKING CHANGE: mô tả
+#   - Closes #issue_number
+# ----------------------------------------
+# EXAMPLES:
+#   feat(auth): add JWT authentication
+#
+#   Implement JWT-based authentication middleware
+#   Closes #42
+#
+#   fix(api): handle null response from payment service
+#
+#   refactor(user): extract validation logic to service layer
+# ----------------------------------------

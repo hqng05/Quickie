@@ -13,7 +13,7 @@ class MetricsManager(
     private val started = AtomicBoolean(false)
 
     fun start() {
-        if (!plugin.configManager.getMetricsEnabled) {
+        if (!plugin.configManager.getMetricsEnabled()) {
             plugin.logger.info("bStats metrics disabled via config.")
             return
         }

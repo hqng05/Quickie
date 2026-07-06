@@ -1,2 +1,38 @@
+# ═══════════════════════════════════════════════════════════════
+# Quickie — Configuration
+# ═══════════════════════════════════════════════════════════════
+
+enable-prefix: true
+prefix: "<gradient:#E43A96:#FFFFFF>ꞯᴜɪᴄᴋɪᴇ</gradient>"
+
+# ────── Database Section ─────────────────────────────────────
+database:
+  type: "sqlite" # Supported type: sqlite, mysql
+
+  # ───── MySQL Settings ──────────────────────────────────────
+  # Only used when database.type is set to "mysql".
+  mysql:
+    host: localhost
+    port: 3306
+    database: "quickie_db"
+    username: "quickie"
+    password: "password"
+
+  # ───── SQLite Settings ─────────────────────────────────────
+  # Only used when database.type is set to "sqlite".
+  # File is stored relative to the plugin's data folder.
+  sqlite:
+    file: "quickie.db"
+
+  # ────── HikariCP Connection Pool ─────────────────────────────────────
+  # Shared settings for both MySQL and SQLite.
+  # SQLite ignores maximum-pool-size and minimum-idle (forced to 1).
+  hikari:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    connection-timeout: 30000
+    idle-timeout: 600000
+    max-lifetime: 1800000
+
 metrics:
   enabled: true

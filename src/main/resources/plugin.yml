@@ -1,9 +1,10 @@
 name: Quickie
 version: '${version}'
-
 main: tech.qhuyy.quickie.Quickie
 api-version: '1.21.8'
 load: POSTWORLD
-
+folia-supported: true
 authors: [ qhuyy ]
 website: https://qhuyy.tech
+libraries:
+  - net.kyori:adventure-platform-bukkit:4.4.1

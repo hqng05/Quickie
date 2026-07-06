@@ -98,9 +98,13 @@ dependencies {
     compileOnly("com.mysql:mysql-connector-j:9.7.0")
     compileOnly("org.xerial:sqlite-jdbc:3.53.2.0")
     compileOnly("com.google.code.gson:gson:2.10.1")
+    // Source: https://mvnrepository.com/artifact/net.kyori/adventure-platform-bukkit
+    compileOnly("net.kyori:adventure-platform-bukkit:4.4.1")
 
     implementation("org.bstats:bstats-bukkit:3.1.0")
     implementation("com.tcoded:FoliaLib:0.5.1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 }
 
 // ─── Kotlin ──────────────────────────────────────────────────────────────────
@@ -142,6 +146,12 @@ tasks.shadowJar {
     // Relocate to avoid classpath conflicts with other plugins
     relocate("com.tcoded.folialib", "$projectPackage.libs.folialib")
     relocate("org.bstats",          "$projectPackage.libs.bstats")
+
+    relocate("kotlin", "$projectPackage.libs.kotlin") {
+        exclude("kotlin/kotlin.kotlin_builtins")
+        exclude("kotlin/reflect/reflect.kotlin_builtins")
+        exclude("META-INF/kotlin*")
+    }
 
     // ── JAR signing / module metadata — invalid inside a fat JAR
     exclude("META-INF/*.SF")

@@ -18,6 +18,5 @@ class ConfigManager(
         config = plugin.config
     }
 
-    val getMetricsEnabled: Boolean
-        get() = config.getBoolean("metrics.enabled", true)
+    fun getMetricsEnabled(): Boolean = config.getBoolean("metrics.enabled", true)
 }
