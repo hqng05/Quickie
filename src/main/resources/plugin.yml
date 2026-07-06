@@ -6,5 +6,6 @@ load: POSTWORLD
 folia-supported: true
 authors: [ qhuyy ]
 website: https://qhuyy.tech
+depend: [ Vault ]
 libraries:
   - net.kyori:adventure-platform-bukkit:4.4.1

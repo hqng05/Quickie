@@ -95,6 +95,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     compileOnly("com.zaxxer:HikariCP:5.1.0")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
     compileOnly("com.mysql:mysql-connector-j:9.7.0")
     compileOnly("org.xerial:sqlite-jdbc:3.53.2.0")
     compileOnly("com.google.code.gson:gson:2.10.1")

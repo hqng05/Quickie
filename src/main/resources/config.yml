@@ -34,5 +34,8 @@ database:
     idle-timeout: 600000
     max-lifetime: 1800000
 
+economy:
+  starting-balance: 100.0
+
 metrics:
   enabled: true
