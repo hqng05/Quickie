@@ -98,6 +98,7 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
     compileOnly("com.mysql:mysql-connector-j:9.7.0")
     compileOnly("org.xerial:sqlite-jdbc:3.53.2.0")
+    compileOnly("dev.jorel:commandapi-paper-core:11.2.0")
     compileOnly("com.google.code.gson:gson:2.10.1")
     // Source: https://mvnrepository.com/artifact/net.kyori/adventure-platform-bukkit
     compileOnly("net.kyori:adventure-platform-bukkit:4.4.1")
