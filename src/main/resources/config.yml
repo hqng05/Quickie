@@ -2,9 +2,6 @@
 # Quickie — Configuration
 # ═══════════════════════════════════════════════════════════════
 
-enable-prefix: true
-prefix: "<gradient:#E43A96:#FFFFFF>ꞯᴜɪᴄᴋɪᴇ</gradient>"
-
 # ────── Database Section ─────────────────────────────────────
 database:
   type: "sqlite" # Supported type: sqlite, mysql

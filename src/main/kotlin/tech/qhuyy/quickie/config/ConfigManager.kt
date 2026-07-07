@@ -21,14 +21,6 @@ class ConfigManager(
         config = plugin.config
     }
 
-    // ────────────────── Prefix Section ──────────────────
-    fun isPrefixEnabled(): Boolean = config.getBoolean("enable-prefix", true)
-    fun getPrefix(): String = config.getString(
-        "prefix",
-        "<gradient:#E43A96:#FFFFFF>ꞯᴜɪᴄᴋɪᴇ</gradient>"
-    ) ?: "<gradient:#E43A96:#FFFFFF>ꞯᴜɪᴄᴋɪᴇ</gradient>"
-    // ──────────────────────────────────────────────────────
-
     // ────────────────── Database Section ──────────────────
     // Database type: "sqlite" or "mysql"
     fun getDatabaseType(): DatabaseType
