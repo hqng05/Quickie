@@ -69,7 +69,7 @@ class ConfigManager(
         return if(configPath.startsWith("/") || configPath.contains(":")) {
             configPath
         } else {
-            "${plugin.dataPath}/$configPath"
+            "${plugin.dataFolder.path}/$configPath"
         }
     }
 
@@ -84,17 +84,17 @@ class ConfigManager(
         2
     )
 
-    fun getMySQLConnectionTimeout(): Long = config.getLong(
+    fun getPoolConnectionTimeout(): Long = config.getLong(
         "database.hikari.connection-timeout",
         30000
     )
 
-    fun getMySQLIdleTimeout(): Long = config.getLong(
+    fun getPoolIdleTimeout(): Long = config.getLong(
         "database.hikari.idle-timeout",
         600000
     )
 
-    fun getMySQLMaxLifetime(): Long = config.getLong(
+    fun getPoolMaxLifetime(): Long = config.getLong(
         "database.hikari.max-lifetime",
         1800000
     )
