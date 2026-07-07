@@ -6,8 +6,11 @@ import net.milkbowl.vault.economy.Economy
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.ServicePriority
 import tech.qhuyy.quickie.config.ConfigManager
+import tech.qhuyy.quickie.core.QuickieServices
 import tech.qhuyy.quickie.database.DatabaseManager
+import tech.qhuyy.quickie.command.CommandManager
 import tech.qhuyy.quickie.manager.MessageManager
+import dev.jorel.commandapi.CommandAPI
 import tech.qhuyy.quickie.economy.EconomyListener
 import tech.qhuyy.quickie.economy.EconomyManager
 import tech.qhuyy.quickie.economy.VaultEconomyProvider
@@ -40,6 +43,8 @@ class Quickie : JavaPlugin() {
         private set
     lateinit var economyManager: EconomyManager
         private set
+    lateinit var commandManager: CommandManager
+        private set
 
     override fun onEnable() {
         foliaLib = FoliaLib(this)
@@ -61,8 +66,8 @@ class Quickie : JavaPlugin() {
             logger.severe("Economy/database disabled: ${e.message}")
         }
 
+        economyManager = EconomyManager(this, databaseManager, configManager)
         if (databaseManager.isConnected) {
-            economyManager = EconomyManager(this, databaseManager, configManager)
             runBlocking { economyManager.init() }
 
             val provider = VaultEconomyProvider(this, economyManager, configManager, databaseManager)
@@ -74,6 +79,14 @@ class Quickie : JavaPlugin() {
             )
             server.pluginManager.registerEvents(EconomyListener(this, economyManager), this)
         }
+
+        // Command system is independent of DB connectivity: commands that do not depend
+        // on the database (e.g. reload, version) must still register and work even if the
+        // database connection failed. CommandAPI must be enabled before any command is
+        // registered.
+        CommandAPI.onEnable()
+        val services = QuickieServices(this, configManager, databaseManager, economyManager, messageManager, scope)
+        commandManager = CommandManager(this, services, emptyList()).also { it.registerAll() }
     }
 
     private fun logScheduleStatus() {
@@ -102,6 +115,10 @@ class Quickie : JavaPlugin() {
     }
 
     override fun onDisable() {
+        if (::commandManager.isInitialized) {
+            commandManager.unregisterAll()
+        }
+        CommandAPI.onDisable()
         messageManager.unload()
         server.servicesManager.unregisterAll(this)
         databaseManager.shutdown()
