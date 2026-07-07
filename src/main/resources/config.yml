@@ -35,7 +35,15 @@ database:
     max-lifetime: 1800000
 
 economy:
-  starting-balance: 100.0
+  # Starting balance for newly created accounts. BigDecimal string, 2 decimal places.
+  starting-balance: "100.00"
+  # Currency names used by the Vault provider when formatting money.
+  # singular is used when the amount equals 1, plural otherwise.
+  currency:
+    singular: "coin"
+    plural: "coins"
+  # Decimal places shown when formatting money (display only; does NOT affect stored precision).
+  fractional-digits: 2
 
 metrics:
   enabled: true

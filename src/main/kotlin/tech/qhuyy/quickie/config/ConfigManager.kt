@@ -3,6 +3,7 @@ package tech.qhuyy.quickie.config
 import org.bukkit.configuration.file.FileConfiguration
 import tech.qhuyy.quickie.Quickie
 import tech.qhuyy.quickie.enums.DatabaseType
+import java.math.BigDecimal
 
 @Suppress("UNUSED")
 class ConfigManager(
@@ -98,6 +99,21 @@ class ConfigManager(
         "database.hikari.max-lifetime",
         1800000
     )
+    // ──────────────────────────────────────────────────────
+
+    // ────────────────── Economy Section ──────────────────
+    fun getEconomyStartingBalance(): BigDecimal =
+        config.getString("economy.starting-balance", "100.00")
+            ?.toBigDecimalOrNull() ?: BigDecimal("100.00")
+
+    fun getEconomyCurrencySingular(): String =
+        config.getString("economy.currency.singular", "coin") ?: "coin"
+
+    fun getEconomyCurrencyPlural(): String =
+        config.getString("economy.currency.plural", "coins") ?: "coins"
+
+    fun getEconomyFractionalDigits(): Int =
+        config.getInt("economy.fractional-digits", 2).coerceAtLeast(0)
     // ──────────────────────────────────────────────────────
 
     // ────────────────── Metrics Section ──────────────────
